@@ -227,6 +227,10 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
+                    <!-- Show test execution in real-time on console -->
+                    <useFile>false</useFile>
+                    <printSummary>true</printSummary>
+                    <reportFormat>plain</reportFormat>
                     <properties>
                         <property>
                             <name>parallel</name>
