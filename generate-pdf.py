@@ -153,7 +153,8 @@ def build_document():
         "12. Enterprise Features",
         "13. GitHub Actions CI/CD Integration",
         "14. Configuration Management",
-        "15. Running the Framework"
+        "15. Running the Framework",
+        "16. Changing the Test Device (Pixel 6 to Samsung Galaxy, etc.)"
     ]
     for item in toc_items:
         story.append(Paragraph(item, styles['BodyText2']))
@@ -1001,6 +1002,167 @@ def build_document():
     story.append(Spacer(1, 0.3*inch))
     story.append(Paragraph(
         "<b>Result: 7/7 tests PASSED | 0 failures | 0 skipped | Total time: ~160 seconds</b>",
+        styles['BodyText2']
+    ))
+    story.append(PageBreak())
+    
+    # ===== 16. CHANGING DEVICE =====
+    story.append(Paragraph("16. Changing the Test Device (e.g., Pixel 6 to Samsung Galaxy)", styles['SectionTitle']))
+    story.append(Paragraph(
+        "The framework supports running tests on any Android or iOS device — physical or virtual. "
+        "Below is a complete guide to switch from the default Pixel 6 emulator to a different device "
+        "such as a Samsung Galaxy S23.",
+        styles['BodyText2']
+    ))
+    
+    story.append(Paragraph("16.1 Local Execution - Changing the Android Emulator", styles['SubSection']))
+    story.append(Paragraph("Step 1: Create a New AVD (Android Virtual Device)", styles['SubSubSection']))
+    story.append(Paragraph(
+        "# List available system images<br/>"
+        "sdkmanager --list | findstr system-images<br/><br/>"
+        "# Install a system image (if not already installed)<br/>"
+        "sdkmanager \"system-images;android-34;google_apis;x86_64\"<br/><br/>"
+        "# Create a Samsung-like AVD (use any name you prefer)<br/>"
+        "avdmanager create avd -n Samsung_Galaxy_S23 -k \"system-images;android-34;google_apis;x86_64\" -d \"pixel_6\"<br/><br/>"
+        "# Or create via Android Studio: Tools > Device Manager > Create Device > Phone > Galaxy S23<br/>"
+        "# Select a system image > Finish",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("Step 2: Start the New Emulator", styles['SubSubSection']))
+    story.append(Paragraph(
+        "# List available AVDs<br/>"
+        "emulator -list-avds<br/><br/>"
+        "# Start the Samsung emulator<br/>"
+        "emulator -avd Samsung_Galaxy_S23",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("Step 3: Update Configuration", styles['SubSubSection']))
+    story.append(Paragraph(
+        "You have THREE options to change the device. Choose one:",
+        styles['BodyText2']
+    ))
+    
+    story.append(Paragraph("<b>Option A: Update config.properties (permanent change)</b>", styles['BodyText2']))
+    story.append(Paragraph(
+        "# File: src/main/resources/config/config.properties<br/>"
+        "android.device.name=emulator-5554 &nbsp;&nbsp;&nbsp;# Keep as emulator-5554 (ADB serial, same for all emulators)<br/>"
+        "android.platform.version=14 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Update if changing Android version",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("<b>Option B: Pass as Maven system property (per-run override)</b>", styles['BodyText2']))
+    story.append(Paragraph(
+        "mvn test -Dsuite.xml=testng-smoke.xml \\<br/>"
+        "&nbsp;&nbsp;-Dfw.platform=ANDROID \\<br/>"
+        "&nbsp;&nbsp;-Dfw.execution.mode=LOCAL \\<br/>"
+        "&nbsp;&nbsp;-Dfw.android.device.name=emulator-5554 \\<br/>"
+        "&nbsp;&nbsp;-Dfw.android.platform.version=14",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("<b>Option C: Update TestNG XML parameters (suite-level)</b>", styles['BodyText2']))
+    story.append(Paragraph(
+        "&lt;test name=\"Samsung Galaxy S23 Tests\"&gt;<br/>"
+        "&nbsp;&nbsp;&lt;parameter name=\"platform\" value=\"ANDROID\"/&gt;<br/>"
+        "&nbsp;&nbsp;&lt;parameter name=\"deviceName\" value=\"emulator-5554\"/&gt;<br/>"
+        "&nbsp;&nbsp;&lt;parameter name=\"platformVersion\" value=\"14\"/&gt;<br/>"
+        "&nbsp;&nbsp;&lt;classes&gt;...&lt;/classes&gt;<br/>"
+        "&lt;/test&gt;",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("16.2 Physical Device - USB Connected Samsung", styles['SubSection']))
+    story.append(Paragraph(
+        "To run on a real physical Samsung device connected via USB:",
+        styles['BodyText2']
+    ))
+    steps_physical = [
+        "<b>Enable Developer Options:</b> Settings > About Phone > Tap 'Build Number' 7 times",
+        "<b>Enable USB Debugging:</b> Settings > Developer Options > USB Debugging = ON",
+        "<b>Connect via USB</b> and accept the 'Allow USB debugging' prompt on device",
+        "<b>Verify connection:</b> Run <font face='Courier'>adb devices</font> — device should show with a serial like 'R5CR1234567'",
+        "<b>Update config.properties:</b> Set <font face='Courier'>android.device.name=R5CR1234567</font> (use actual serial from adb devices)",
+        "<b>Run tests:</b> Same Maven command, device will be targeted automatically",
+    ]
+    for item in steps_physical:
+        story.append(Paragraph(f"• {item}", styles['BulletItem']))
+    
+    story.append(Paragraph("16.3 BrowserStack - Changing Cloud Device", styles['SubSection']))
+    story.append(Paragraph(
+        "For BrowserStack cloud execution, change the device in the workflow or via Maven properties:",
+        styles['BodyText2']
+    ))
+    
+    bs_devices_data = [
+        ['Device Name (BrowserStack)', 'OS Version', 'Maven Property Override'],
+        ['Samsung Galaxy S23', '13.0', '-Dfw.browserstack.device=\"Samsung Galaxy S23\" -Dfw.browserstack.os.version=13.0'],
+        ['Samsung Galaxy S24 Ultra', '14.0', '-Dfw.browserstack.device=\"Samsung Galaxy S24 Ultra\" -Dfw.browserstack.os.version=14.0'],
+        ['Samsung Galaxy A54', '13.0', '-Dfw.browserstack.device=\"Samsung Galaxy A54\" -Dfw.browserstack.os.version=13.0'],
+        ['Google Pixel 8', '14.0', '-Dfw.browserstack.device=\"Google Pixel 8\" -Dfw.browserstack.os.version=14.0'],
+        ['OnePlus 12', '14.0', '-Dfw.browserstack.device=\"OnePlus 12\" -Dfw.browserstack.os.version=14.0'],
+        ['iPhone 15 Pro', '17', '-Dfw.browserstack.device=\"iPhone 15 Pro\" -Dfw.browserstack.os.version=17'],
+    ]
+    t = Table(bs_devices_data, colWidths=[1.8*inch, 0.8*inch, 4.2*inch])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), HexColor('#283593')),
+        ('TEXTCOLOR', (0,0), (-1,0), white),
+        ('FONTSIZE', (0,0), (-1,-1), 7.5),
+        ('GRID', (0,0), (-1,-1), 0.5, HexColor('#bdbdbd')),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [white, HexColor('#f5f5f5')]),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('LEFTPADDING', (0,0), (-1,-1), 4),
+        ('RIGHTPADDING', (0,0), (-1,-1), 4),
+    ]))
+    story.append(t)
+    story.append(Spacer(1, 0.2*inch))
+    
+    story.append(Paragraph(
+        "To update the GitHub Actions matrix for a different device, edit "
+        "<font face='Courier'>.github/workflows/mobile-automation.yml</font> under the "
+        "<font face='Courier'>browserstack-test</font> job's matrix section:",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "strategy:<br/>"
+        "&nbsp;&nbsp;matrix:<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;include:<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- platform: ANDROID<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device: \"Samsung Galaxy S23\" &nbsp;# ← Change device here<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;os_version: \"13.0\" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ← Change OS version<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- platform: IOS<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device: \"iPhone 15 Pro\"<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;os_version: \"17\"",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("16.4 Multi-Device Parallel Execution", styles['SubSection']))
+    story.append(Paragraph(
+        "To run tests simultaneously on multiple devices, add multiple &lt;test&gt; blocks in a TestNG XML file, "
+        "each with different device parameters. Each test block gets its own thread with isolated driver:",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "&lt;suite name=\"Multi-Device\" parallel=\"tests\" thread-count=\"3\"&gt;<br/>"
+        "&nbsp;&nbsp;&lt;test name=\"Samsung Galaxy S23\"&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;parameter name=\"platform\" value=\"ANDROID\"/&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;parameter name=\"deviceName\" value=\"emulator-5554\"/&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;parameter name=\"platformVersion\" value=\"14\"/&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;classes&gt;...&lt;/classes&gt;<br/>"
+        "&nbsp;&nbsp;&lt;/test&gt;<br/>"
+        "&nbsp;&nbsp;&lt;test name=\"Pixel 8\"&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;parameter name=\"platform\" value=\"ANDROID\"/&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;parameter name=\"deviceName\" value=\"emulator-5556\"/&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;parameter name=\"platformVersion\" value=\"14\"/&gt;<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&lt;classes&gt;...&lt;/classes&gt;<br/>"
+        "&nbsp;&nbsp;&lt;/test&gt;<br/>"
+        "&lt;/suite&gt;",
+        styles['CodeBlock']
+    ))
+    story.append(Paragraph(
+        "<b>Note:</b> Each emulator must use a different port (5554, 5556, 5558...). Start multiple emulators with: "
+        "<font face='Courier'>emulator -avd Samsung_Galaxy_S23 -port 5556</font>",
         styles['BodyText2']
     ))
     

@@ -118,12 +118,6 @@ jobs:
             ~/.android/adb*
           key: avd-api-31-${{ runner.os }}
 
-      - name: Start Appium Server
-        run: |
-          appium --address 127.0.0.1 --port 4723 --relaxed-security &
-          sleep 5
-          echo "✅ Appium server started"
-
       - name: Run Tests on Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -137,6 +131,11 @@ jobs:
             echo "============================================"
             echo "🚀 RUNNING SMOKE TESTS ON ANDROID EMULATOR"
             echo "============================================"
+
+            # Start Appium server in background
+            npx appium --address 127.0.0.1 --port 4723 --relaxed-security &
+            sleep 10
+
             adb devices
             echo ""
 
@@ -316,9 +315,10 @@ jobs:
     name: Notification
     needs: [build, android-test]
     runs-on: ubuntu-latest
-    if: always() && secrets.SLACK_WEBHOOK_URL != ''
+    if: always()
     steps:
       - name: Slack Notification
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ needs.android-test.result || needs.build.result }}
