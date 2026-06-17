@@ -11,7 +11,8 @@ import com.enterprise.mobile.config.ConfigManager;
 import com.enterprise.mobile.config.FrameworkConstants;
 
 /**
- * Extent Report manager. Singleton that creates and manages the report instance.
+ * Extent Report manager. Singleton that creates and manages the report
+ * instance.
  */
 public final class ExtentReportManager {
 

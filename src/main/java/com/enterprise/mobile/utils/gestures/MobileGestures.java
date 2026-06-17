@@ -19,7 +19,8 @@ import com.enterprise.mobile.exceptions.GestureException;
 import io.appium.java_client.AppiumDriver;
 
 /**
- * Comprehensive mobile gesture utility supporting all common mobile interactions.
+ * Comprehensive mobile gesture utility supporting all common mobile
+ * interactions.
  * Uses W3C Actions API (Appium 2.x compatible).
  */
 public class MobileGestures {
@@ -249,7 +250,8 @@ public class MobileGestures {
                 .addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
                 .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
                 .addAction(new Pause(finger, Duration.ofMillis(500)))
-                .addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, endY))
+                .addAction(
+                        finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, endY))
                 .addAction(new Pause(finger, Duration.ofMillis(200)))
                 .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
@@ -316,13 +318,15 @@ public class MobileGestures {
         Sequence zoomFinger1 = new Sequence(finger1, 0)
                 .addAction(finger1.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), x - 10, y))
                 .addAction(finger1.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
-                .addAction(finger1.createPointerMove(Duration.ofMillis(500), PointerInput.Origin.viewport(), x - offset, y))
+                .addAction(finger1.createPointerMove(Duration.ofMillis(500), PointerInput.Origin.viewport(), x - offset,
+                        y))
                 .addAction(finger1.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
         Sequence zoomFinger2 = new Sequence(finger2, 0)
                 .addAction(finger2.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), x + 10, y))
                 .addAction(finger2.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
-                .addAction(finger2.createPointerMove(Duration.ofMillis(500), PointerInput.Origin.viewport(), x + offset, y))
+                .addAction(finger2.createPointerMove(Duration.ofMillis(500), PointerInput.Origin.viewport(), x + offset,
+                        y))
                 .addAction(finger2.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
         driver.perform(Arrays.asList(zoomFinger1, zoomFinger2));
@@ -344,7 +348,8 @@ public class MobileGestures {
         Sequence swipe = new Sequence(finger, 1)
                 .addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
                 .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
-                .addAction(finger.createPointerMove(Duration.ofMillis(durationMs), PointerInput.Origin.viewport(), endX, endY))
+                .addAction(finger.createPointerMove(Duration.ofMillis(durationMs), PointerInput.Origin.viewport(), endX,
+                        endY))
                 .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
         driver.perform(Collections.singletonList(swipe));
@@ -355,7 +360,6 @@ public class MobileGestures {
         Dimension size = element.getSize();
         return new Point(
                 location.getX() + size.getWidth() / 2,
-                location.getY() + size.getHeight() / 2
-        );
+                location.getY() + size.getHeight() / 2);
     }
 }

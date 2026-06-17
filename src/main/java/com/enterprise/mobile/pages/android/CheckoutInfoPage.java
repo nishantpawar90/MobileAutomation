@@ -80,8 +80,8 @@ public class CheckoutInfoPage extends BasePage {
 
     @Step("Fill complete shipping address")
     public CheckoutInfoPage fillShippingAddress(String fullName, String address1,
-                                                 String city, String state,
-                                                 String zip, String country) {
+            String city, String state,
+            String zip, String country) {
         enterFullName(fullName);
         enterAddress1(address1);
         enterCity(city);

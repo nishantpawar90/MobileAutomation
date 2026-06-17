@@ -45,7 +45,7 @@ public class CheckoutE2ETest extends BaseTest {
         loginPage = new LoginPage();
     }
 
-    @Test(groups = {"smoke", "e2e"}, description = "Complete purchase flow: Browse -> Cart -> Checkout")
+    @Test(groups = { "smoke", "e2e" }, description = "Complete purchase flow: Browse -> Cart -> Checkout")
     @Severity(SeverityLevel.BLOCKER)
     @Story("Full Purchase Journey")
     @Description("End-to-end test covering: login, browse catalog, add product, checkout with shipping info")
@@ -91,8 +91,7 @@ public class CheckoutE2ETest extends BaseTest {
                 TestDataGenerator.generateCity(),
                 "California",
                 TestDataGenerator.generateZipCode(),
-                TestDataGenerator.generateCountry()
-        );
+                TestDataGenerator.generateCountry());
         logger.info("Step 7: Shipping address filled");
 
         // Step 8: Tap To Payment
@@ -100,7 +99,7 @@ public class CheckoutE2ETest extends BaseTest {
         logger.info("Step 8: Navigated to payment");
     }
 
-    @Test(groups = {"regression", "e2e"}, description = "Add multiple products to cart")
+    @Test(groups = { "regression", "e2e" }, description = "Add multiple products to cart")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Multi-Product Cart")
     @Description("Add two different products to cart and verify cart contents")
@@ -128,7 +127,7 @@ public class CheckoutE2ETest extends BaseTest {
         logger.info("Cart total with multiple products: {}", totalPrice);
     }
 
-    @Test(groups = {"regression", "e2e"}, description = "Checkout validation - empty shipping fields")
+    @Test(groups = { "regression", "e2e" }, description = "Checkout validation - empty shipping fields")
     @Severity(SeverityLevel.NORMAL)
     @Story("Checkout Validation")
     @Description("Verify that checkout form validation prevents submission with empty required fields")
@@ -152,11 +151,10 @@ public class CheckoutE2ETest extends BaseTest {
                         checkoutInfoPage.isAddressErrorDisplayed() ||
                         checkoutInfoPage.isCityErrorDisplayed() ||
                         checkoutInfoPage.isZipErrorDisplayed(),
-                "At least one validation error should be shown for empty form"
-        );
+                "At least one validation error should be shown for empty form");
     }
 
-    @Test(groups = {"regression", "e2e"}, description = "Empty cart shows Go Shopping button")
+    @Test(groups = { "regression", "e2e" }, description = "Empty cart shows Go Shopping button")
     @Severity(SeverityLevel.NORMAL)
     @Story("Empty Cart")
     @Description("Verify that an empty cart shows the Go Shopping button")

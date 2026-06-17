@@ -24,9 +24,9 @@ import java.util.Map;
  * Login functionality test cases for Sauce Labs My Demo App.
  *
  * Valid credentials:
- *   - bob@example.com / 10203040
+ * - bob@example.com / 10203040
  * Locked out user:
- *   - alice@example.com / 10203040
+ * - alice@example.com / 10203040
  *
  * Navigation: Open app -> Product Catalog -> Menu -> Login
  */
@@ -52,7 +52,7 @@ public class LoginTests extends BaseTest {
         menuPage.goToLogin();
     }
 
-    @Test(groups = {"smoke", "login"}, description = "Verify successful login with valid credentials")
+    @Test(groups = { "smoke", "login" }, description = "Verify successful login with valid credentials")
     @Severity(SeverityLevel.BLOCKER)
     @Story("Valid Login")
     @Description("Test that user can successfully login with bob@example.com / 10203040")
@@ -61,15 +61,15 @@ public class LoginTests extends BaseTest {
 
         loginPage.login(
                 (String) testData.get("username"),
-                (String) testData.get("password")
-        );
+                (String) testData.get("password"));
 
         // After successful login, app navigates back to Product Catalog
         Assert.assertTrue(catalogPage.isPageLoaded(),
                 "Product catalog should be displayed after successful login");
     }
 
-    @Test(groups = {"smoke", "login"}, description = "Verify login with any credentials navigates to catalog (demo app)")
+    @Test(groups = { "smoke",
+            "login" }, description = "Verify login with any credentials navigates to catalog (demo app)")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Invalid Login")
     @Description("Test that the demo app accepts any credentials and navigates to catalog")
@@ -81,7 +81,7 @@ public class LoginTests extends BaseTest {
                 "Demo app should navigate to catalog even with invalid credentials");
     }
 
-    @Test(groups = {"regression", "login"}, description = "Verify login with empty username shows error")
+    @Test(groups = { "regression", "login" }, description = "Verify login with empty username shows error")
     @Severity(SeverityLevel.NORMAL)
     @Story("Login Validation")
     @Description("Test that username error is shown when username field is empty")
@@ -92,7 +92,7 @@ public class LoginTests extends BaseTest {
                 "Username error icon should be displayed for empty username");
     }
 
-    @Test(groups = {"regression", "login"}, description = "Verify login with empty password shows error")
+    @Test(groups = { "regression", "login" }, description = "Verify login with empty password shows error")
     @Severity(SeverityLevel.NORMAL)
     @Story("Login Validation")
     @Description("Test that password error is shown when password field is empty")
@@ -103,7 +103,7 @@ public class LoginTests extends BaseTest {
                 "Password error icon should be displayed for empty password");
     }
 
-    @Test(groups = {"regression", "login"}, description = "Verify login with random generated credentials fails")
+    @Test(groups = { "regression", "login" }, description = "Verify login with random generated credentials fails")
     @Severity(SeverityLevel.NORMAL)
     @Story("Data-Driven Login")
     @Description("Test login with faker-generated credentials to verify error handling")
@@ -118,7 +118,7 @@ public class LoginTests extends BaseTest {
                 "Should remain on login page with random credentials");
     }
 
-    @Test(groups = {"regression", "login"}, description = "Verify locked out user cannot login")
+    @Test(groups = { "regression", "login" }, description = "Verify locked out user cannot login")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Locked Account")
     @Description("Test that alice@example.com (locked out user) cannot login")
@@ -130,7 +130,7 @@ public class LoginTests extends BaseTest {
                 "Locked out user should remain on login page");
     }
 
-    @Test(groups = {"regression", "login"}, description = "Verify tap on saved username auto-fills field")
+    @Test(groups = { "regression", "login" }, description = "Verify tap on saved username auto-fills field")
     @Severity(SeverityLevel.NORMAL)
     @Story("Auto-fill Credentials")
     @Description("Test tapping pre-populated username fills the username field")
@@ -142,7 +142,7 @@ public class LoginTests extends BaseTest {
                 "Should login successfully after tapping saved credentials");
     }
 
-    @Test(groups = {"smoke", "login"}, description = "Verify login page UI elements are displayed")
+    @Test(groups = { "smoke", "login" }, description = "Verify login page UI elements are displayed")
     @Severity(SeverityLevel.NORMAL)
     @Story("Login Page UI")
     @Description("Verify all login page elements are present")

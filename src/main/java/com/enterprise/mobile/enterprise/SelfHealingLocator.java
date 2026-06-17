@@ -160,8 +160,8 @@ public final class SelfHealingLocator {
         StringBuilder report = new StringBuilder("=== Self-Healing Report ===\n");
         report.append("Total healed locators: ").append(healedLocators.size()).append("\n\n");
 
-        healedLocators.forEach((name, locator) ->
-                report.append(String.format("Element: '%s' -> Healed to: %s%n", name, locator)));
+        healedLocators.forEach(
+                (name, locator) -> report.append(String.format("Element: '%s' -> Healed to: %s%n", name, locator)));
 
         return report.toString();
     }

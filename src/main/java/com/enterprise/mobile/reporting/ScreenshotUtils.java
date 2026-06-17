@@ -101,7 +101,8 @@ public final class ScreenshotUtils {
     public static void attachScreenshotToAllure(String name) {
         try {
             AppiumDriver driver = DriverManager.getDriver();
-            if (driver == null) return;
+            if (driver == null)
+                return;
 
             byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             Allure.addAttachment(name, "image/png", new ByteArrayInputStream(screenshot), ".png");
@@ -116,7 +117,8 @@ public final class ScreenshotUtils {
     public static String captureDeviceInfo() {
         try {
             AppiumDriver driver = DriverManager.getDriver();
-            if (driver == null) return "Driver not available";
+            if (driver == null)
+                return "Driver not available";
 
             StringBuilder info = new StringBuilder();
             info.append("Session ID: ").append(driver.getSessionId()).append("\n");

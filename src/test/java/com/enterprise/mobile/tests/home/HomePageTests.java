@@ -37,7 +37,7 @@ public class HomePageTests extends BaseTest {
         menuPage = new NavigationMenuPage();
     }
 
-    @Test(groups = {"smoke", "catalog"}, description = "Verify product catalog loads on app start")
+    @Test(groups = { "smoke", "catalog" }, description = "Verify product catalog loads on app start")
     @Severity(SeverityLevel.BLOCKER)
     @Story("Catalog Load")
     @Description("Verify that the product catalog page loads when the app is opened")
@@ -48,7 +48,7 @@ public class HomePageTests extends BaseTest {
                 "Page title should be 'Products'");
     }
 
-    @Test(groups = {"smoke", "catalog"}, description = "Verify products are displayed in the catalog")
+    @Test(groups = { "smoke", "catalog" }, description = "Verify products are displayed in the catalog")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Product Listing")
     @Description("Verify that products with titles and prices are displayed")
@@ -61,7 +61,7 @@ public class HomePageTests extends BaseTest {
         logger.info("Found {} products: {}", titles.size(), titles);
     }
 
-    @Test(groups = {"smoke", "catalog"}, description = "Verify product prices are displayed")
+    @Test(groups = { "smoke", "catalog" }, description = "Verify product prices are displayed")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Product Pricing")
     @Description("Verify that product prices are shown with dollar sign")
@@ -75,7 +75,7 @@ public class HomePageTests extends BaseTest {
         }
     }
 
-    @Test(groups = {"regression", "catalog"}, description = "Verify tapping product opens detail page")
+    @Test(groups = { "regression", "catalog" }, description = "Verify tapping product opens detail page")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Product Navigation")
     @Description("Verify that tapping a product opens the product detail page")
@@ -90,7 +90,7 @@ public class HomePageTests extends BaseTest {
         Assert.assertTrue(price.startsWith("$"), "Price should start with '$'");
     }
 
-    @Test(groups = {"regression", "catalog"}, description = "Verify product detail shows quantity controls")
+    @Test(groups = { "regression", "catalog" }, description = "Verify product detail shows quantity controls")
     @Severity(SeverityLevel.NORMAL)
     @Story("Quantity Controls")
     @Description("Verify plus/minus buttons and quantity display on product detail page")
@@ -107,7 +107,7 @@ public class HomePageTests extends BaseTest {
         Assert.assertEquals(detailPage.getQuantity(), 1, "Quantity should be back to 1");
     }
 
-    @Test(groups = {"regression", "catalog"}, description = "Verify add to cart from product detail")
+    @Test(groups = { "regression", "catalog" }, description = "Verify add to cart from product detail")
     @Severity(SeverityLevel.CRITICAL)
     @Story("Add to Cart")
     @Description("Verify adding a product to cart from the detail page")
@@ -123,7 +123,7 @@ public class HomePageTests extends BaseTest {
                 "Cart badge should be visible after adding a product");
     }
 
-    @Test(groups = {"regression", "catalog"}, description = "Verify scrolling loads more products")
+    @Test(groups = { "regression", "catalog" }, description = "Verify scrolling loads more products")
     @Severity(SeverityLevel.NORMAL)
     @Story("Scroll Catalog")
     @Description("Verify scrolling down reveals more products in the catalog")
@@ -136,7 +136,7 @@ public class HomePageTests extends BaseTest {
                 "Products should still be visible after scrolling");
     }
 
-    @Test(groups = {"regression", "catalog"}, description = "Verify navigation menu opens")
+    @Test(groups = { "regression", "catalog" }, description = "Verify navigation menu opens")
     @Severity(SeverityLevel.NORMAL)
     @Story("Navigation Menu")
     @Description("Verify the side navigation menu can be opened from catalog")

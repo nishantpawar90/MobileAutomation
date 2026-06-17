@@ -26,9 +26,11 @@ public final class BrowserStackCapabilities {
     public static Map<String, Object> getAndroidCapabilities(DeviceConfig deviceConfig) {
         Map<String, Object> bstackOptions = getCommonCapabilities();
         bstackOptions.put("deviceName", deviceConfig.getBrowserStackDevice() != null
-                ? deviceConfig.getBrowserStackDevice() : deviceConfig.getDeviceName());
+                ? deviceConfig.getBrowserStackDevice()
+                : deviceConfig.getDeviceName());
         bstackOptions.put("osVersion", deviceConfig.getOsVersion() != null
-                ? deviceConfig.getOsVersion() : deviceConfig.getPlatformVersion());
+                ? deviceConfig.getOsVersion()
+                : deviceConfig.getPlatformVersion());
         bstackOptions.put("os", "android");
         return bstackOptions;
     }
@@ -44,9 +46,11 @@ public final class BrowserStackCapabilities {
     public static Map<String, Object> getIOSCapabilities(DeviceConfig deviceConfig) {
         Map<String, Object> bstackOptions = getCommonCapabilities();
         bstackOptions.put("deviceName", deviceConfig.getBrowserStackDevice() != null
-                ? deviceConfig.getBrowserStackDevice() : deviceConfig.getDeviceName());
+                ? deviceConfig.getBrowserStackDevice()
+                : deviceConfig.getDeviceName());
         bstackOptions.put("osVersion", deviceConfig.getOsVersion() != null
-                ? deviceConfig.getOsVersion() : deviceConfig.getPlatformVersion());
+                ? deviceConfig.getOsVersion()
+                : deviceConfig.getPlatformVersion());
         bstackOptions.put("os", "ios");
         return bstackOptions;
     }
@@ -56,7 +60,8 @@ public final class BrowserStackCapabilities {
         bstackOptions.put("userName", config.getBrowserStackUsername());
         bstackOptions.put("accessKey", config.getBrowserStackAccessKey());
         bstackOptions.put("projectName", config.getProperty("browserstack.project.name", "Mobile Automation"));
-        bstackOptions.put("buildName", config.getProperty("browserstack.build.name", "Build-" + System.currentTimeMillis()));
+        bstackOptions.put("buildName",
+                config.getProperty("browserstack.build.name", "Build-" + System.currentTimeMillis()));
         bstackOptions.put("sessionName", "Test-" + Thread.currentThread().getName());
         bstackOptions.put("debug", true);
         bstackOptions.put("networkLogs", true);

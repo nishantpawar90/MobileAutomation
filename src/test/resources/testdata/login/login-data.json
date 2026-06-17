@@ -1,29 +1,29 @@
 [
-  {
-    "testCase": "valid_login",
-    "username": "bob@example.com",
-    "password": "10203040",
-    "expectedResult": "success"
-  },
-  {
-    "testCase": "invalid_password",
-    "username": "bob@example.com",
-    "password": "wrongpassword",
-    "expectedResult": "failure",
-    "expectedError": "Provided credentials do not match any user in this service."
-  },
-  {
-    "testCase": "locked_account",
-    "username": "alice@example.com",
-    "password": "10203040",
-    "expectedResult": "failure",
-    "expectedError": "Sorry, this user has been locked out."
-  },
-  {
-    "testCase": "empty_fields",
-    "username": "",
-    "password": "",
-    "expectedResult": "failure",
-    "expectedError": "Username is required"
-  }
+    {
+        "testCase": "valid_login",
+        "username": "bob@example.com",
+        "password": "10203040",
+        "expectedResult": "success"
+    },
+    {
+        "testCase": "invalid_password",
+        "username": "bob@example.com",
+        "password": "wrongpassword",
+        "expectedResult": "failure",
+        "expectedError": "Provided credentials do not match any user in this service."
+    },
+    {
+        "testCase": "locked_account",
+        "username": "alice@example.com",
+        "password": "10203040",
+        "expectedResult": "failure",
+        "expectedError": "Sorry, this user has been locked out."
+    },
+    {
+        "testCase": "empty_fields",
+        "username": "",
+        "password": "",
+        "expectedResult": "failure",
+        "expectedError": "Username is required"
+    }
 ]

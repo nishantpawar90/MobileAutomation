@@ -46,7 +46,8 @@ public final class JsonDataReader {
         String filePath = getFilePath(fileName);
         try {
             return objectMapper.readValue(new File(filePath),
-                    new TypeReference<List<Map<String, Object>>>() {});
+                    new TypeReference<List<Map<String, Object>>>() {
+                    });
         } catch (IOException e) {
             throw new TestDataException("Failed to read JSON list from: " + filePath, e);
         }
@@ -59,7 +60,8 @@ public final class JsonDataReader {
         String filePath = getFilePath(fileName);
         try {
             return objectMapper.readValue(new File(filePath),
-                    new TypeReference<Map<String, Object>>() {});
+                    new TypeReference<Map<String, Object>>() {
+                    });
         } catch (IOException e) {
             throw new TestDataException("Failed to read JSON map from: " + filePath, e);
         }

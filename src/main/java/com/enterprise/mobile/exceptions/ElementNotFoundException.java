@@ -1,7 +1,8 @@
 package com.enterprise.mobile.exceptions;
 
 /**
- * Thrown when an element cannot be found after retries and self-healing attempts.
+ * Thrown when an element cannot be found after retries and self-healing
+ * attempts.
  */
 public class ElementNotFoundException extends FrameworkException {
 

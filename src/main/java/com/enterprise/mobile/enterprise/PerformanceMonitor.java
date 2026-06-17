@@ -141,8 +141,7 @@ public final class PerformanceMonitor {
         }
 
         StringBuilder report = new StringBuilder("=== Performance Report ===\n");
-        allMetrics.forEach((key, value) ->
-                report.append(String.format("%s: %s%n", key, value)));
+        allMetrics.forEach((key, value) -> report.append(String.format("%s: %s%n", key, value)));
 
         return report.toString();
     }

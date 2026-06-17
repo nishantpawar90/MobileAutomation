@@ -22,18 +22,18 @@ import io.appium.java_client.AppiumDriver;
  * All test classes must extend this class.
  * Supports parameterized execution for device matrix testing.
  */
-@Listeners({TestListener.class, AnnotationTransformer.class})
+@Listeners({ TestListener.class, AnnotationTransformer.class })
 public abstract class BaseTest {
 
     protected final Logger logger = LogManager.getLogger(this.getClass());
     protected AppiumDriver driver;
 
     @BeforeMethod(alwaysRun = true)
-    @Parameters({"platform", "deviceName", "platformVersion", "udid"})
+    @Parameters({ "platform", "deviceName", "platformVersion", "udid" })
     public void setUp(@Optional String platform,
-                      @Optional String deviceName,
-                      @Optional String platformVersion,
-                      @Optional String udid) {
+            @Optional String deviceName,
+            @Optional String platformVersion,
+            @Optional String udid) {
 
         if (platform != null && deviceName != null) {
             // Parameterized execution (from testng.xml)

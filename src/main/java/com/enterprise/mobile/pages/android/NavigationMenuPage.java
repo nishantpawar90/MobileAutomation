@@ -17,15 +17,23 @@ public class NavigationMenuPage extends BasePage {
 
     // ===== Locators =====
     private final By menuButton = AppiumBy.accessibilityId("View menu");
-    private final By catalogMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='Catalog' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
-    private final By webViewMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='WebView' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
-    private final By qrCodeMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='QR Code Scanner' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
-    private final By geoLocationMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='Geo Location' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
-    private final By drawingMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='Drawing' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
-    private final By aboutMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='About' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By catalogMenuItem = AppiumBy
+            .xpath("//android.widget.TextView[@text='Catalog' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By webViewMenuItem = AppiumBy
+            .xpath("//android.widget.TextView[@text='WebView' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By qrCodeMenuItem = AppiumBy.xpath(
+            "//android.widget.TextView[@text='QR Code Scanner' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By geoLocationMenuItem = AppiumBy
+            .xpath("//android.widget.TextView[@text='Geo Location' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By drawingMenuItem = AppiumBy
+            .xpath("//android.widget.TextView[@text='Drawing' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By aboutMenuItem = AppiumBy
+            .xpath("//android.widget.TextView[@text='About' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
     private final By loginMenuItem = AppiumBy.accessibilityId("Login Menu Item");
-    private final By logoutMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='Log Out' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
-    private final By resetAppMenuItem = AppiumBy.xpath("//android.widget.TextView[@text='Reset App State' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By logoutMenuItem = AppiumBy
+            .xpath("//android.widget.TextView[@text='Log Out' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
+    private final By resetAppMenuItem = AppiumBy.xpath(
+            "//android.widget.TextView[@text='Reset App State' and @resource-id='" + APP_PACKAGE + ":id/itemTV']");
 
     @Override
     public boolean isPageLoaded() {

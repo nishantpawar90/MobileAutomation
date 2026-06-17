@@ -36,7 +36,8 @@ public final class VideoRecorder {
     public static void startRecording() {
         try {
             AppiumDriver driver = DriverManager.getDriver();
-            if (driver == null) return;
+            if (driver == null)
+                return;
 
             if (driver instanceof AndroidDriver androidDriver) {
                 androidDriver.startRecordingScreen(
@@ -59,10 +60,12 @@ public final class VideoRecorder {
 
     public static String stopRecording(String testName) {
         try {
-            if (!isRecording.get()) return null;
+            if (!isRecording.get())
+                return null;
 
             AppiumDriver driver = DriverManager.getDriver();
-            if (driver == null) return null;
+            if (driver == null)
+                return null;
 
             String videoBase64;
             if (driver instanceof AndroidDriver androidDriver) {

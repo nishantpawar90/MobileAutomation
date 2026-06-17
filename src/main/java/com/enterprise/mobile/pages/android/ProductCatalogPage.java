@@ -15,7 +15,8 @@ import io.qameta.allure.Step;
  * Product Catalog Page Object for Sauce Labs My Demo App (Android).
  * Maps to fragment_product_catalog.xml — the main product listing screen.
  *
- * This is the home/landing page after opening the app (no login required to browse).
+ * This is the home/landing page after opening the app (no login required to
+ * browse).
  */
 public class ProductCatalogPage extends BasePage {
 
@@ -31,7 +32,8 @@ public class ProductCatalogPage extends BasePage {
     // Navigation / Menu
     private final By menuButton = AppiumBy.accessibilityId("View menu");
     private final By cartBadge = AppiumBy.accessibilityId("View cart");
-    private final By sortButton = AppiumBy.accessibilityId("Shows current sorting order and displays available sorting options");
+    private final By sortButton = AppiumBy
+            .accessibilityId("Shows current sorting order and displays available sorting options");
 
     @Override
     public boolean isPageLoaded() {

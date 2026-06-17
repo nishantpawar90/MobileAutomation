@@ -37,7 +37,8 @@ public class AppLaunchTest extends BaseTest {
             Assert.assertEquals(title, "Products", "Title should be 'Products'");
         } else {
             // Log page source for debugging
-            logger.error("Page source: {}", driver.getPageSource().substring(0, Math.min(2000, driver.getPageSource().length())));
+            logger.error("Page source: {}",
+                    driver.getPageSource().substring(0, Math.min(2000, driver.getPageSource().length())));
             Assert.fail("Product catalog page did not load within timeout");
         }
     }

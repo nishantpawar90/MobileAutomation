@@ -40,7 +40,7 @@ public final class ExcelDataReader {
         List<Map<String, String>> data = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(filePath));
-             Workbook workbook = new XSSFWorkbook(fis)) {
+                Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheet(sheetName);
             if (sheet == null) {
@@ -59,7 +59,8 @@ public final class ExcelDataReader {
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row == null) continue;
+                if (row == null)
+                    continue;
 
                 Map<String, String> rowData = new HashMap<>();
                 for (int j = 0; j < headers.size(); j++) {
@@ -81,14 +82,15 @@ public final class ExcelDataReader {
      * Reads specific columns from a sheet, filtered by a condition.
      */
     public static List<Map<String, String>> readData(String fileName, String sheetName,
-                                                     String filterColumn, String filterValue) {
+            String filterColumn, String filterValue) {
         return readData(fileName, sheetName).stream()
                 .filter(row -> filterValue.equals(row.get(filterColumn)))
                 .toList();
     }
 
     private static String getCellValueAsString(Cell cell) {
-        if (cell == null) return "";
+        if (cell == null)
+            return "";
 
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue();
