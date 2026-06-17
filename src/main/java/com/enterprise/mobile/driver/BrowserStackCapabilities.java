@@ -17,8 +17,12 @@ public final class BrowserStackCapabilities {
 
     public static Map<String, Object> getAndroidCapabilities() {
         Map<String, Object> bstackOptions = getCommonCapabilities();
-        bstackOptions.put("deviceName", config.getProperty("android.device.name", "Google Pixel 6"));
-        bstackOptions.put("osVersion", config.getProperty("android.platform.version", "13.0"));
+        String device = config.getProperty("browserstack.device");
+        bstackOptions.put("deviceName", device != null && !device.isEmpty()
+                ? device : config.getProperty("android.device.name", "Google Pixel 6"));
+        String osVer = config.getProperty("browserstack.os.version");
+        bstackOptions.put("osVersion", osVer != null && !osVer.isEmpty()
+                ? osVer : config.getProperty("android.platform.version", "13.0"));
         bstackOptions.put("os", "android");
         return bstackOptions;
     }
@@ -37,8 +41,12 @@ public final class BrowserStackCapabilities {
 
     public static Map<String, Object> getIOSCapabilities() {
         Map<String, Object> bstackOptions = getCommonCapabilities();
-        bstackOptions.put("deviceName", config.getProperty("ios.device.name", "iPhone 14"));
-        bstackOptions.put("osVersion", config.getProperty("ios.platform.version", "16"));
+        String device = config.getProperty("browserstack.device");
+        bstackOptions.put("deviceName", device != null && !device.isEmpty()
+                ? device : config.getProperty("ios.device.name", "iPhone 14"));
+        String osVer = config.getProperty("browserstack.os.version");
+        bstackOptions.put("osVersion", osVer != null && !osVer.isEmpty()
+                ? osVer : config.getProperty("ios.platform.version", "16"));
         bstackOptions.put("os", "ios");
         return bstackOptions;
     }
