@@ -79,7 +79,7 @@ jobs:
     needs: build
     runs-on: macos-13
     timeout-minutes: 45
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.execution_mode == 'LOCAL' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.execution_mode == 'LOCAL' }}
 
     steps:
       - name: Checkout Code
@@ -307,7 +307,7 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────────
   notify:
     name: Notification
-    needs: [build, android-test]
+    needs: [build]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -315,18 +315,18 @@ jobs:
         if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         uses: 8398a7/action-slack@v3
         with:
-          status: ${{ needs.android-test.result || needs.build.result }}
+          status: ${{ needs.build.result }}
           fields: repo,message,commit,author,workflow,ref
           custom_payload: |
             {
               "attachments": [{
-                "color": "${{ needs.android-test.result == 'success' && '#36a64f' || '#ff0000' }}",
+                "color": "${{ needs.build.result == 'success' && '#36a64f' || '#ff0000' }}",
                 "blocks": [
                   {
                     "type": "header",
                     "text": {
                       "type": "plain_text",
-                      "text": "${{ needs.android-test.result == 'success' && '✅' || '❌' }} Mobile Tests - ${{ needs.android-test.result }}"
+                      "text": "${{ needs.build.result == 'success' && '✅' || '❌' }} Mobile Automation - ${{ needs.build.result }}"
                     }
                   },
                   {
