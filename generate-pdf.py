@@ -154,7 +154,8 @@ def build_document():
         "13. GitHub Actions CI/CD Integration",
         "14. Configuration Management",
         "15. Running the Framework",
-        "16. Changing the Test Device (Pixel 6 to Samsung Galaxy, etc.)"
+        "16. Changing the Test Device (Pixel 6 to Samsung Galaxy, etc.)",
+        "17. Configuring & Running Tests on BrowserStack"
     ]
     for item in toc_items:
         story.append(Paragraph(item, styles['BodyText2']))
@@ -1165,6 +1166,183 @@ def build_document():
         "<font face='Courier'>emulator -avd Samsung_Galaxy_S23 -port 5556</font>",
         styles['BodyText2']
     ))
+    story.append(PageBreak())
+    
+    # ===== 17. BROWSERSTACK CONFIGURATION =====
+    story.append(Paragraph("17. Configuring & Running Tests on BrowserStack", styles['SectionTitle']))
+    story.append(Paragraph(
+        "BrowserStack App Automate allows you to run mobile tests on 3000+ real devices in the cloud. "
+        "This section provides step-by-step instructions to configure and execute tests on BrowserStack.",
+        styles['BodyText2']
+    ))
+    
+    story.append(Paragraph("17.1 Prerequisites", styles['SubSection']))
+    bs_prereqs = [
+        "<b>BrowserStack Account:</b> Sign up at <font face='Courier'>https://www.browserstack.com/</font> (free trial available with 100 min)",
+        "<b>Username &amp; Access Key:</b> Found at <font face='Courier'>https://www.browserstack.com/accounts/settings</font>",
+        "<b>App uploaded to BrowserStack:</b> Upload your APK/IPA to get a <font face='Courier'>bs://</font> app URL",
+    ]
+    for item in bs_prereqs:
+        story.append(Paragraph(f"• {item}", styles['BulletItem']))
+    
+    story.append(Paragraph("17.2 Step 1: Upload Your App to BrowserStack", styles['SubSection']))
+    story.append(Paragraph(
+        "Upload your APK file using cURL (or the BrowserStack dashboard):",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "curl -u \"YOUR_USERNAME:YOUR_ACCESS_KEY\" \\<br/>"
+        "&nbsp;&nbsp;-X POST \"https://api-cloud.browserstack.com/app-automate/upload\" \\<br/>"
+        "&nbsp;&nbsp;-F \"file=@src/test/resources/apps/SauceLabs-MyDemoApp.apk\" \\<br/>"
+        "&nbsp;&nbsp;-F \"custom_id=MyDemoApp\"<br/><br/>"
+        "# Response:<br/>"
+        "# {\"app_url\": \"bs://a1b2c3d4e5f6...\", \"custom_id\": \"MyDemoApp\"}<br/>"
+        "# Save the app_url — you'll need it to run tests",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("17.3 Step 2: Set Environment Variables", styles['SubSection']))
+    story.append(Paragraph(
+        "Set credentials as environment variables (NEVER hardcode in source code):",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "# Windows (Command Prompt)<br/>"
+        "set BROWSERSTACK_USERNAME=your_username<br/>"
+        "set BROWSERSTACK_ACCESS_KEY=your_access_key<br/><br/>"
+        "# Windows (PowerShell)<br/>"
+        "$env:BROWSERSTACK_USERNAME = \"your_username\"<br/>"
+        "$env:BROWSERSTACK_ACCESS_KEY = \"your_access_key\"<br/><br/>"
+        "# Linux/macOS<br/>"
+        "export BROWSERSTACK_USERNAME=your_username<br/>"
+        "export BROWSERSTACK_ACCESS_KEY=your_access_key",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("17.4 Step 3: Run Tests on BrowserStack", styles['SubSection']))
+    story.append(Paragraph(
+        "Execute the Maven command with BrowserStack execution mode:",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "# Run smoke tests on BrowserStack (uses default device from testng-browserstack.xml)<br/>"
+        "mvn test -Pbrowserstack -Dfw.execution.mode=BROWSERSTACK \\<br/>"
+        "&nbsp;&nbsp;-Dfw.browserstack.app.url=bs://a1b2c3d4e5f6<br/><br/>"
+        "# Run on a specific device<br/>"
+        "mvn test -Pbrowserstack -Dfw.execution.mode=BROWSERSTACK \\<br/>"
+        "&nbsp;&nbsp;-Dfw.browserstack.app.url=bs://a1b2c3d4e5f6 \\<br/>"
+        "&nbsp;&nbsp;-Dfw.browserstack.device=\"Samsung Galaxy S23\" \\<br/>"
+        "&nbsp;&nbsp;-Dfw.browserstack.os.version=13.0<br/><br/>"
+        "# Run regression suite with 3 parallel threads<br/>"
+        "mvn test -Pregression -Dfw.execution.mode=BROWSERSTACK \\<br/>"
+        "&nbsp;&nbsp;-Dfw.browserstack.app.url=bs://a1b2c3d4e5f6 \\<br/>"
+        "&nbsp;&nbsp;-Dthread.count=3",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("17.5 Step 4: View Results on BrowserStack Dashboard", styles['SubSection']))
+    story.append(Paragraph(
+        "After test execution, view results at <font face='Courier'>https://app-automate.browserstack.com/dashboard</font>. "
+        "Each test session includes:",
+        styles['BodyText2']
+    ))
+    bs_dashboard = [
+        "<b>Video Recording:</b> Full video replay of test execution on the real device",
+        "<b>Network Logs:</b> HTTP request/response capture during the test",
+        "<b>Device Logs:</b> Logcat (Android) or Console logs (iOS)",
+        "<b>Screenshots:</b> Captured at each Appium command",
+        "<b>Appium Logs:</b> Complete Appium server logs for debugging",
+        "<b>Text Logs:</b> Custom debug logs from the framework",
+    ]
+    for item in bs_dashboard:
+        story.append(Paragraph(f"• {item}", styles['BulletItem']))
+    
+    story.append(Paragraph("17.6 Step 5: Configure GitHub Actions for BrowserStack", styles['SubSection']))
+    story.append(Paragraph(
+        "To run BrowserStack tests automatically in CI/CD, configure GitHub repository secrets:",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "1. Go to your GitHub repository: Settings > Secrets and variables > Actions<br/>"
+        "2. Click 'New repository secret' and add:<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;• Name: BROWSERSTACK_USERNAME &nbsp;&nbsp;Value: your_username<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;• Name: BROWSERSTACK_ACCESS_KEY &nbsp;&nbsp;Value: your_access_key<br/>"
+        "3. (Optional) Add: SLACK_WEBHOOK_URL for test notifications<br/>"
+        "4. Go to Actions tab > 'Mobile Automation CI/CD' > 'Run workflow'<br/>"
+        "5. Select: Execution Mode = BROWSERSTACK, choose Platform and Test Suite<br/>"
+        "6. Click 'Run workflow' — tests will execute on real cloud devices",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("17.7 How the Framework Connects to BrowserStack (Internal Flow)", styles['SubSection']))
+    story.append(Paragraph(
+        "When execution.mode=BROWSERSTACK, the following happens internally:",
+        styles['BodyText2']
+    ))
+    flow_steps = [
+        "1. <b>ConfigManager</b> reads execution.mode=BROWSERSTACK from system property",
+        "2. <b>DriverFactory.createDriver()</b> detects BROWSERSTACK mode",
+        "3. <b>SecretManager</b> retrieves username/key from env vars (BROWSERSTACK_USERNAME, BROWSERSTACK_ACCESS_KEY)",
+        "4. <b>BrowserStackCapabilities</b> builds the bstack:options map with device, OS, project name, video=true, networkLogs=true",
+        "5. <b>DriverFactory</b> constructs URL: https://username:key@hub-cloud.browserstack.com/wd/hub",
+        "6. <b>AndroidDriver/IOSDriver</b> is created with the remote BrowserStack URL + capabilities",
+        "7. Tests execute identically to local — same Page Objects, same assertions",
+        "8. On completion, video/logs are available in BrowserStack dashboard",
+    ]
+    for item in flow_steps:
+        story.append(Paragraph(f"&nbsp;&nbsp;{item}", styles['BulletItem']))
+    
+    story.append(Paragraph("17.8 BrowserStack Configuration Properties", styles['SubSection']))
+    story.append(Paragraph(
+        "These properties in config.properties control BrowserStack behavior:",
+        styles['BodyText2']
+    ))
+    story.append(Paragraph(
+        "# BrowserStack Connection<br/>"
+        "browserstack.url=https://hub-cloud.browserstack.com/wd/hub<br/>"
+        "browserstack.app.url=bs://app-id &nbsp;&nbsp;&nbsp;# Override with -Dfw.browserstack.app.url=bs://xxx<br/>"
+        "browserstack.build.name=Mobile-Automation-Build<br/>"
+        "browserstack.project.name=Enterprise-Mobile-Framework<br/><br/>"
+        "# Credentials (via environment variables - NEVER in this file)<br/>"
+        "# BROWSERSTACK_USERNAME=your_username<br/>"
+        "# BROWSERSTACK_ACCESS_KEY=your_access_key<br/><br/>"
+        "# BrowserStack Features (set in BrowserStackCapabilities.java)<br/>"
+        "# debug=true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Enable text logs<br/>"
+        "# networkLogs=true &nbsp;&nbsp;&nbsp;# Capture HTTP traffic<br/>"
+        "# video=true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Record video<br/>"
+        "# appiumVersion=2.4.1 # Appium version on BrowserStack<br/>"
+        "# idleTimeout=300 &nbsp;&nbsp;&nbsp;&nbsp;# Max idle seconds before kill",
+        styles['CodeBlock']
+    ))
+    
+    story.append(Paragraph("17.9 Supported BrowserStack Devices", styles['SubSection']))
+    story.append(Paragraph(
+        "Browse the full device list at: <font face='Courier'>https://www.browserstack.com/list-of-browsers-and-platforms/app_automate</font>",
+        styles['BodyText2']
+    ))
+    bs_popular = [
+        ['Device', 'Platform', 'OS Versions Available'],
+        ['Samsung Galaxy S24 Ultra', 'Android', '14.0'],
+        ['Samsung Galaxy S23', 'Android', '13.0, 14.0'],
+        ['Samsung Galaxy A54', 'Android', '13.0'],
+        ['Google Pixel 8 Pro', 'Android', '14.0'],
+        ['Google Pixel 7', 'Android', '13.0'],
+        ['OnePlus 12', 'Android', '14.0'],
+        ['iPhone 15 Pro Max', 'iOS', '17'],
+        ['iPhone 14', 'iOS', '16'],
+        ['iPad Pro 12.9 2022', 'iOS', '16'],
+    ]
+    t = Table(bs_popular, colWidths=[2.2*inch, 1*inch, 1.8*inch])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), HexColor('#283593')),
+        ('TEXTCOLOR', (0,0), (-1,0), white),
+        ('FONTSIZE', (0,0), (-1,-1), 9),
+        ('GRID', (0,0), (-1,-1), 0.5, HexColor('#bdbdbd')),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [white, HexColor('#f5f5f5')]),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('LEFTPADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(t)
     
     # Build the PDF
     doc.build(story)

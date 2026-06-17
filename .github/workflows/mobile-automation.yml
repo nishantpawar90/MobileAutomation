@@ -77,7 +77,7 @@ jobs:
   android-test:
     name: Android Emulator Tests
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     timeout-minutes: 45
     if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.execution_mode == 'LOCAL' }}
 
@@ -103,12 +103,6 @@ jobs:
           appium driver install uiautomator2
           echo "✅ Appium installed: $(appium --version)"
 
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
       - name: AVD Cache
         uses: actions/cache@v4
         id: avd-cache
@@ -116,7 +110,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-api-31-${{ runner.os }}
+          key: avd-api-31-macos-${{ runner.os }}
 
       - name: Run Tests on Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -133,7 +127,7 @@ jobs:
             echo "============================================"
 
             # Start Appium server in background
-            npx appium --address 127.0.0.1 --port 4723 --relaxed-security &
+            appium --address 127.0.0.1 --port 4723 --relaxed-security &
             sleep 10
 
             adb devices
