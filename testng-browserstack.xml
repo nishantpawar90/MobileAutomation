@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="BrowserStack Suite" verbose="2">
+
+    <listeners>
+        <listener class-name="com.enterprise.mobile.listeners.TestListener"/>
+        <listener class-name="com.enterprise.mobile.listeners.AnnotationTransformer"/>
+    </listeners>
+
+    <!-- Android Device Matrix -->
+    <test name="Samsung Galaxy S23 - Android 13">
+        <parameter name="platform" value="ANDROID"/>
+        <parameter name="deviceName" value="Samsung Galaxy S23"/>
+        <parameter name="platformVersion" value="13.0"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.enterprise.mobile.tests.*"/>
+        </packages>
+    </test>
+
+    <test name="Google Pixel 7 - Android 13">
+        <parameter name="platform" value="ANDROID"/>
+        <parameter name="deviceName" value="Google Pixel 7"/>
+        <parameter name="platformVersion" value="13.0"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.enterprise.mobile.tests.*"/>
+        </packages>
+    </test>
+
+    <!-- iOS Device Matrix -->
+    <test name="iPhone 14 Pro - iOS 16">
+        <parameter name="platform" value="IOS"/>
+        <parameter name="deviceName" value="iPhone 14 Pro"/>
+        <parameter name="platformVersion" value="16"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.enterprise.mobile.tests.*"/>
+        </packages>
+    </test>
+
+    <test name="iPhone 13 - iOS 15">
+        <parameter name="platform" value="IOS"/>
+        <parameter name="deviceName" value="iPhone 13"/>
+        <parameter name="platformVersion" value="15"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.enterprise.mobile.tests.*"/>
+        </packages>
+    </test>
+</suite>

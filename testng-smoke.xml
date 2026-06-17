@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Smoke Test Suite" verbose="2">
+
+    <listeners>
+        <listener class-name="com.enterprise.mobile.listeners.TestListener"/>
+        <listener class-name="com.enterprise.mobile.listeners.AnnotationTransformer"/>
+    </listeners>
+
+    <test name="Android Smoke Tests">
+        <parameter name="platform" value="ANDROID"/>
+        <parameter name="deviceName" value="emulator-5554"/>
+        <parameter name="platformVersion" value="14"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.enterprise.mobile.tests.login.LoginTests"/>
+            <class name="com.enterprise.mobile.tests.home.HomePageTests"/>
+            <class name="com.enterprise.mobile.tests.e2e.CheckoutE2ETest"/>
+        </classes>
+    </test>
+</suite>

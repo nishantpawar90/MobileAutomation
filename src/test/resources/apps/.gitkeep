@@ -1,0 +1,2 @@
+# Keep apps directory in Git but ignore actual binaries
+# Place your .apk and .app/.ipa files here

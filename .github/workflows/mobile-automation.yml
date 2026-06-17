@@ -1,0 +1,186 @@
+name: Mobile Automation CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Target Platform'
+        required: true
+        type: choice
+        options:
+          - ANDROID
+          - IOS
+        default: ANDROID
+      environment:
+        description: 'Target Environment'
+        required: true
+        type: choice
+        options:
+          - QA
+          - DEV
+          - STAGE
+        default: QA
+      test_suite:
+        description: 'Test Suite'
+        required: true
+        type: choice
+        options:
+          - smoke
+          - regression
+          - sanity
+        default: smoke
+      execution_mode:
+        description: 'Execution Mode'
+        required: true
+        type: choice
+        options:
+          - BROWSERSTACK
+          - LOCAL
+        default: BROWSERSTACK
+
+env:
+  JAVA_VERSION: '17'
+  BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+  BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ANDROID
+            device: "Google Pixel 6"
+            os_version: "13.0"
+          - platform: IOS
+            device: "iPhone 14"
+            os_version: "16"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Upload App to BrowserStack
+        if: ${{ github.event.inputs.execution_mode == 'BROWSERSTACK' || github.event_name != 'workflow_dispatch' }}
+        id: upload-app
+        run: |
+          RESPONSE=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
+            -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
+            -F "file=@src/test/resources/apps/android-app.apk" \
+            -F "custom_id=MobileApp")
+          APP_URL=$(echo $RESPONSE | jq -r '.app_url')
+          echo "app_url=$APP_URL" >> $GITHUB_OUTPUT
+
+      - name: Run Tests
+        run: |
+          SUITE_FILE="testng-${{ github.event.inputs.test_suite || 'smoke' }}.xml"
+          PLATFORM="${{ github.event.inputs.platform || matrix.platform }}"
+          ENV="${{ github.event.inputs.environment || 'QA' }}"
+          MODE="${{ github.event.inputs.execution_mode || 'BROWSERSTACK' }}"
+
+          mvn test \
+            -Dsuite.xml=$SUITE_FILE \
+            -Dfw.platform=$PLATFORM \
+            -Dfw.environment=$ENV \
+            -Dfw.execution.mode=$MODE \
+            -Dfw.browserstack.app.url=${{ steps.upload-app.outputs.app_url || '' }} \
+            -Dthread.count=3
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          allure_results: target/allure-results
+          allure_history: allure-history
+
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: always() && github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.platform }}
+          path: |
+            test-output/reports/
+            test-output/screenshots/
+            target/allure-results/
+            logs/
+          retention-days: 30
+
+      - name: Upload Videos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-videos-${{ matrix.platform }}
+          path: test-output/videos/
+          retention-days: 7
+
+      - name: Slack Notification
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,workflow,ref
+          custom_payload: |
+            {
+              "attachments": [{
+                "color": "${{ job.status == 'success' && '#36a64f' || '#ff0000' }}",
+                "blocks": [
+                  {
+                    "type": "header",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "${{ job.status == 'success' && '✅' || '❌' }} Mobile Tests - ${{ job.status }}"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {"type": "mrkdwn", "text": "*Platform:* ${{ matrix.platform }}"},
+                      {"type": "mrkdwn", "text": "*Device:* ${{ matrix.device }}"},
+                      {"type": "mrkdwn", "text": "*Suite:* ${{ github.event.inputs.test_suite || 'smoke' }}"},
+                      {"type": "mrkdwn", "text": "*Branch:* ${{ github.ref_name }}"}
+                    ]
+                  }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  notify-summary:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Test Summary Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ needs.test.result }}
+          fields: workflow,ref
+          custom_payload: |
+            {
+              "text": "Mobile Automation Run Complete - Status: ${{ needs.test.result }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

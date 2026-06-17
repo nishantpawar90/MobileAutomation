@@ -1,0 +1,43 @@
+# Compiled class files
+target/
+*.class
+
+# Log files
+logs/
+*.log
+
+# IDE files
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test output
+test-output/
+allure-results/
+allure-report/
+
+# Maven
+dependency-reduced-pom.xml
+
+# Environment secrets (NEVER commit)
+*.env
+secrets.properties
+local.properties
+
+# App binaries
+src/test/resources/apps/*.apk
+src/test/resources/apps/*.ipa
+src/test/resources/apps/*.app
+
+# Videos and screenshots (generated)
+test-output/screenshots/
+test-output/videos/
